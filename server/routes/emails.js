@@ -1,24 +1,13 @@
 const express = require("express");
-const app = express();
-import { fetchEmails, sendEmail } from "../controllers/emailController";
+const router = express.Router();
+const { fetchEmails, sendEmail } = require("../controllers/emailController");
 
-app.get("/api/emails/inbox", (req, res) => {
-  try {
-    fetchEmails(req, res);
-  } catch (error) {
-    res.status(500).json({
-      message: "Internal server error -- Fetch Emails Unsuccessful",
-      error: error.message,
-    });
-  }
-});
-app.post("/api/emails/send", (req, res) => {
-  try {
-    sendEmail(req, res);
-  } catch (error) {
-    res.status(500).json({
-      message: "Internal server error -- Send Email Unsuccessful",
-      error: error.message,
-    });
-  }
-});
+const authMiddleware = require("../middleware/authMiddleware");
+
+// This becomes GET /api/emails/inbox
+router.get("/inbox", authMiddleware, fetchEmails);
+
+// This becomes POST /api/emails/send
+router.post("/send", authMiddleware, sendEmail);
+
+module.exports = router;

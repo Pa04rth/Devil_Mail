@@ -1,28 +1,12 @@
 const express = require("express");
-const app = express();
-import login from "../controllers/authController";
-import register from "../controllers/authController";
+const router = express.Router();
+const { register, login } = require("../controllers/authController");
 
-app.post("/api/auth/register", (req, res) => {
-  try {
-    register(req, res);
-  } catch (error) {
-    res.status(500).json({
-      message: "Internal server error -- Register Unsuccesfull",
-      error: error.message,
-    });
-  }
-});
-app.post("/api/auth/login", (req, res) => {
-  try {
-    login(req, res);
-  } catch (error) {
-    res.status(500).json({
-      message: "Internal server error -- Login Unsuccesfull",
-      error: error.message,
-    });
-  }
-});
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+// The path is now relative to the path defined in server.js
+// So this becomes POST /api/auth/register
+router.post("/register", register);
+
+// This becomes POST /api/auth/login
+router.post("/login", login);
+
+module.exports = router;
