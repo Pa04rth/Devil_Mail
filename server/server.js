@@ -9,9 +9,6 @@ const emailRoutes = require("./routes/emails");
 
 const app = express();
 
-// --- DEBUGGING STEP ---
-// Let's print the entire config object to see what was loaded
-console.log("Loaded configuration:", config);
 // --------------------
 
 // --- Middleware ---
