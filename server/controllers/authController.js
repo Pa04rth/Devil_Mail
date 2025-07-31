@@ -38,3 +38,38 @@ export default function register(req, res) {
       res.status(500).json({ message: "Server error", error: err.message })
     );
 }
+
+export default function login(req, res) {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Email and password are required." });
+  }
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials." });
+      }
+      return bcrypt.compare(password, user.password).then((isMatch) => {
+        if (!isMatch) {
+          return res.status(401).json({ message: "Invalid credentials." });
+        }
+        const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+          expiresIn: "1h",
+        });
+        res.status(200).json({
+          token,
+          user: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+          },
+        });
+      });
+    })
+    .catch((err) =>
+      res.status(500).json({ message: "Server error", error: err.message })
+    );
+}
