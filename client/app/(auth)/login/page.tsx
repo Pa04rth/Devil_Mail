@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link"; // Make sure to import Link
 import { useAuth } from "../../../contexts/AuthContext";
 
 export default function LoginPage() {
@@ -36,6 +37,11 @@ export default function LoginPage() {
         />
         <button type="submit">Login</button>
       </form>
+      {/* ADD THIS PART */}
+      <p>
+        Don't have an account? <Link href="/register">Register here</Link>
+      </p>
+      {/* END OF ADDED PART */}
     </div>
   );
 }
