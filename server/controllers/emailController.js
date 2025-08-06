@@ -3,19 +3,14 @@ const config = require("../config");
 
 const fetchEmails = async (req, res) => {
   try {
-    // --- Create the client INSIDE the function ---
-    // This guarantees we have the latest config variables for every request.
     const oauth2Client = new google.auth.OAuth2(
       config.GOOGLE_CLIENT_ID,
       config.GOOGLE_CLIENT_SECRET
     );
-
     oauth2Client.setCredentials({
       refresh_token: config.GOOGLE_REFRESH_TOKEN,
     });
-
     const gmail = google.gmail({ version: "v1", auth: oauth2Client });
-    // ---------------------------------------------
 
     const targetEmail = req.user.email;
 
@@ -34,7 +29,6 @@ const fetchEmails = async (req, res) => {
     const emailPromises = messages.map((msg) =>
       gmail.users.messages.get({ userId: "me", id: msg.id, format: "full" })
     );
-
     const emailResponses = await Promise.all(emailPromises);
 
     const formattedEmails = emailResponses.map((response) => {
@@ -43,7 +37,6 @@ const fetchEmails = async (req, res) => {
       const getHeader = (name) =>
         headers.find((h) => h.name.toLowerCase() === name.toLowerCase())
           ?.value || "";
-
       let body = "";
       if (detail.payload.parts) {
         const part =
@@ -55,7 +48,6 @@ const fetchEmails = async (req, res) => {
       } else if (detail.payload.body.data) {
         body = Buffer.from(detail.payload.body.data, "base64").toString("utf8");
       }
-
       return {
         id: detail.id,
         subject: getHeader("subject"),
@@ -69,9 +61,59 @@ const fetchEmails = async (req, res) => {
     });
     res.json(formattedEmails);
   } catch (error) {
-    // Now the error will be more specific, e.g., 'invalid_grant' if the token is bad
     console.error("Error fetching from Gmail API:", error);
     res.status(500).json({ error: "Failed to fetch emails from Gmail." });
+  }
+};
+
+const fetchSingleEmail = async (req, res) => {
+  try {
+    const oauth2Client = new google.auth.OAuth2(
+      config.GOOGLE_CLIENT_ID,
+      config.GOOGLE_CLIENT_SECRET
+    );
+    oauth2Client.setCredentials({
+      refresh_token: config.GOOGLE_REFRESH_TOKEN,
+    });
+    const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+    const emailId = req.params.id;
+
+    const emailResponse = await gmail.users.messages.get({
+      userId: "me",
+      id: emailId,
+      format: "full",
+    });
+
+    const detail = emailResponse.data;
+    const headers = detail.payload.headers;
+    const getHeader = (name) =>
+      headers.find((h) => h.name.toLowerCase() === name.toLowerCase())?.value ||
+      "";
+
+    let body = "";
+    if (detail.payload.parts) {
+      const part =
+        detail.payload.parts.find((p) => p.mimeType === "text/html") ||
+        detail.payload.parts.find((p) => p.mimeType === "text/plain");
+      if (part && part.body.data) {
+        body = Buffer.from(part.body.data, "base64").toString("utf8");
+      }
+    } else if (detail.payload.body.data) {
+      body = Buffer.from(detail.payload.body.data, "base64").toString("utf8");
+    }
+
+    const formattedEmail = {
+      id: detail.id,
+      subject: getHeader("subject"),
+      from: getHeader("from"),
+      to: getHeader("to"),
+      body,
+    };
+    res.json(formattedEmail);
+  } catch (error) {
+    console.error("Error fetching single email from Gmail API:", error);
+    res.status(500).json({ error: "Failed to fetch single email." });
   }
 };
 
@@ -84,18 +126,14 @@ const sendEmail = async (req, res) => {
   }
 
   try {
-    // --- Create the client INSIDE this function as well ---
     const oauth2Client = new google.auth.OAuth2(
       config.GOOGLE_CLIENT_ID,
       config.GOOGLE_CLIENT_SECRET
     );
-
     oauth2Client.setCredentials({
       refresh_token: config.GOOGLE_REFRESH_TOKEN,
     });
-
     const gmail = google.gmail({ version: "v1", auth: oauth2Client });
-    // -----------------------------------------------------
 
     const email = [
       `From: ${fromEmail}`,
@@ -117,7 +155,6 @@ const sendEmail = async (req, res) => {
         raw: base64EncodedEmail,
       },
     });
-
     res.json({ message: "Email sent successfully" });
   } catch (error) {
     console.error("Error sending email:", error);
@@ -128,4 +165,5 @@ const sendEmail = async (req, res) => {
 module.exports = {
   fetchEmails,
   sendEmail,
+  fetchSingleEmail,
 };

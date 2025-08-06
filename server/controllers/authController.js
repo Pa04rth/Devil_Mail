@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const { JWT_SECRET } = require("../config"); // Correctly import from our new config file
+const { JWT_SECRET } = require("../config");
 
 const register = async (req, res) => {
   const { username, email, password } = req.body;

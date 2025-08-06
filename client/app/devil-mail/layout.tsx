@@ -1,4 +1,4 @@
-"use client"; // This MUST be a client component to use hooks
+"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -14,22 +14,19 @@ export default function DevilMailLayout({
   const router = useRouter();
 
   useEffect(() => {
-    // If loading is finished and there's no user, redirect to login
     if (!isLoading && !user) {
       router.replace("/login");
     }
   }, [user, isLoading, router]);
 
-  // While loading, or if no user, show a loading screen to prevent flash of content
   if (isLoading || !user) {
     return <div>Loading session...</div>;
   }
 
-  // If user is logged in, show the layout and the page content
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       <Sidebar />
-      <main style={{ flexGrow: 1, padding: "20px" }}>{children}</main>
+      <main style={{ flexGrow: 1, height: "100vh" }}>{children}</main>
     </div>
   );
 }
