@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // This is correct for the "always login" feature. It does not read from localStorage.
   useEffect(() => {
     setIsLoading(false);
   }, []);
@@ -41,7 +42,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data } = await api.post("/auth/login", credentials);
       setUser(data.user);
       setToken(data.token);
-      // We explicitly DO NOT save to localStorage to force login every time.
+
+      // --- THIS IS THE FIX ---
+      // We MUST save the token to localStorage so our api.ts file can find it for future requests.
+      // This only affects the CURRENT session.
+      localStorage.setItem("token", data.token);
+      // ----------------------
+
       router.push("/devil-mail/inbox");
     } catch (error) {
       console.error("Login failed", error);
@@ -52,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("user");
+    // When logging out, we ensure the token is removed.
     localStorage.removeItem("token");
     router.push("/login");
   };
