@@ -12,6 +12,7 @@
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif; /* Add a consistent font */
 }
 
 .modalHeader {
@@ -21,6 +22,7 @@
   justify-content: space-between;
   align-items: center;
   font-weight: 500;
+  color: #333; /* Darker header text */
 }
 
 .closeButton {
@@ -38,7 +40,7 @@
 }
 
 .formGroup {
-  border-bottom: 1px solid #e0e0e0;
+  /* We'll apply the border to the input itself for better focus effect */
   margin-bottom: 10px;
 }
 
@@ -46,8 +48,21 @@
   width: 100%;
   padding: 8px 0;
   border: none;
+  border-bottom: 1px solid #e0e0e0; /* A subtle bottom border */
   outline: none;
   font-size: 14px;
+  color: #202124; /* Darker text for what the user types */
+  transition: border-color 0.2s ease-in-out; /* Smooth transition for focus */
+}
+
+/* This is how you style placeholder text */
+.formInput::placeholder {
+  color: #888; /* Much more visible placeholder */
+}
+
+/* This adds the blue line when the input is active */
+.formInput:focus {
+  border-bottom: 2px solid #1a73e8;
 }
 
 .bodyTextarea {
@@ -59,6 +74,15 @@
   font-size: 14px;
   font-family: inherit;
   min-height: 200px;
+  color: #202124; /* Darker body text */
+}
+
+.bodyTextarea::placeholder {
+  color: #888; /* Visible placeholder */
+}
+
+.bodyTextarea:focus {
+  outline: none; /* Ensure no default browser outline */
 }
 
 .submitButton {
@@ -70,7 +94,13 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+  font-weight: bold; /* Make button text stand out */
   align-self: flex-start;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #185abc; /* Darken button on hover */
 }
 
 .submitButton:disabled {
@@ -78,6 +108,7 @@
   cursor: not-allowed;
 }
 
+/* The accessibility helper class remains unchanged */
 .srOnly {
   position: absolute;
   width: 1px;

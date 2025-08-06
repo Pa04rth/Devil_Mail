@@ -43,11 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(data.user);
       setToken(data.token);
 
-      // --- THIS IS THE FIX ---
-      // We MUST save the token to localStorage so our api.ts file can find it for future requests.
-      // This only affects the CURRENT session.
       localStorage.setItem("token", data.token);
-      // ----------------------
 
       router.push("/devil-mail/inbox");
     } catch (error) {
