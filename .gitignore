@@ -24,3 +24,4 @@ Thumbs.db
 # IDE settings (optional)
 .vscode/
 .idea/
+/server/your-service-account-credentials.json
