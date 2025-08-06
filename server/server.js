@@ -3,25 +3,19 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const config = require("./config");
 
-// Import route handlers
 const authRoutes = require("./routes/auth");
 const emailRoutes = require("./routes/emails");
 
 const app = express();
 
-// --------------------
-
-// --- Middleware ---
 app.use(cors());
 app.use(express.json());
 
-// --- API Routes ---
 app.use("/api/auth", authRoutes);
 app.use("/api/emails", emailRoutes);
 
-// --- Database Connection ---
 mongoose
-  .connect(config.MONGODB_URI) // The error happens here if MONGODB_URI is undefined
+  .connect(config.MONGODB_URI)
   .then(() => {
     console.log("Successfully connected to MongoDB.");
     app.listen(config.PORT, () => {
