@@ -1,4 +1,6 @@
+
 "use client";
+import "./EmailList.css";
 
 interface Email {
   id: string;
@@ -19,35 +21,20 @@ export default function EmailList({
 }: EmailListProps) {
   if (emails.length === 0) {
     return (
-      <div style={{ padding: "20px", color: "#666" }}>No emails found.</div>
+      <div className="email-list-empty">No emails found.</div>
     );
   }
   return (
-    <div style={{ flexGrow: 1, overflowY: "auto" }}>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+    <div className="email-list">
+      <ul className="email-list-ul">
         {emails.map((email) => (
           <li
             key={email.id}
             onClick={() => onSelectEmail(email.id)}
-            style={{
-              padding: "15px 20px",
-              borderBottom: "1px solid #eee",
-              cursor: "pointer",
-              backgroundColor:
-                email.id === selectedEmailId ? "#eaf2ff" : "transparent",
-            }}
+            className={`email-list-li${email.id === selectedEmailId ? " selected" : ""}`}
           >
-            <strong>{email.from}</strong>
-            <p
-              style={{
-                margin: "5px 0 0 0",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {email.subject}
-            </p>
+            <span className="email-list-from">{email.from}</span>
+            <p className="email-list-subject">{email.subject}</p>
           </li>
         ))}
       </ul>
