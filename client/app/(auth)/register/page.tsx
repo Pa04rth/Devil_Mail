@@ -2,7 +2,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 import api from "../../../lib/api";
+import "../auth.css";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -23,7 +25,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h1>Register for Devil Mail</h1>
       <form onSubmit={handleSubmit}>
         <input

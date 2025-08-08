@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+
 import { useAuth } from "../../../contexts/AuthContext";
+import "../auth.css";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h1>Login to Devil Mail</h1>
       <form onSubmit={handleSubmit}>
         <input
