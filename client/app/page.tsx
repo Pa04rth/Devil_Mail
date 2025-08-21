@@ -18,7 +18,7 @@ export default function HomePage() {
   }, [user, isLoading, router]);
 
   return (
-    <div className="flex items-center  min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200">
+    <div className="flex items-center  justify-center   min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200">
       <div className="flex flex-col items-center gap-4 p-8 bg-white rounded-xl shadow-lg">
         <svg className="animate-spin h-8 w-8 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />

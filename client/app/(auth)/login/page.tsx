@@ -15,6 +15,7 @@ export default function LoginPage() {
     try {
       await login({ email, password });
     } catch (error) {
+      console.log("Error during the login")
       alert("Login Failed! Please check your credentials.");
     }
   };
@@ -39,6 +40,9 @@ export default function LoginPage() {
         />
         <button type="submit">Login</button>
       </form>
+      <p>
+  Don&apos;t have an account? <Link href="/register">Register here</Link>
+      </p>
     </div>
   );
 }

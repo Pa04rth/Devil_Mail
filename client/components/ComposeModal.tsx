@@ -23,7 +23,8 @@ export default function ComposeModal({ onClose }: ComposeModalProps) {
       await api.post("/emails/send", { to, subject, body });
       alert("Email sent successfully!");
       onClose();
-    } catch (error) {
+    } catch {
+      console.log("Error during the sending mail")
       alert("Failed to send email.");
     } finally {
       setIsSending(false);
@@ -90,3 +91,5 @@ export default function ComposeModal({ onClose }: ComposeModalProps) {
     </div>
   );
 }
+
+
