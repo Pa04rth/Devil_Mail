@@ -40,8 +40,8 @@ export default function CookieBanner() {
       }}
     >
       <p style={{ margin: 0, paddingBottom: "10px" }}>
-        We use cookies to enhance your experience. By clicking "Accept", you
-        agree to our use of cookies.
+  We use cookies to enhance your experience. By clicking &quot;Accept&quot;, you
+  agree to our use of cookies.
         {/* You should link to a real privacy policy page */}
         <Link
           href="/privacy-policy"
